@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.zea7ot.whorepresentsyou.R
 import com.zea7ot.whorepresentsyou.model.ResMember
+import com.zea7ot.whorepresentsyou.ui.MemberDetailsActivity
 
 class AdapterMembers(private val context: Context, private val members: ArrayList<ResMember>) :
     BaseAdapter() {
@@ -48,6 +49,11 @@ class AdapterMembers(private val context: Context, private val members: ArrayLis
 
         val tvName = viewHolder.tvName
         tvName.text = member.name
+
+        tvName.setOnClickListener {
+            val intent = MemberDetailsActivity.newIntent(context, member)
+            context.startActivity(intent)
+        }
 
         return view
     }
