@@ -15,6 +15,7 @@ class JsonTitle {
         const val PHONE = "phone"
         const val OFFICE = "office"
         const val LINK = "link"
+        const val RESULTS = "results"
     }
 }
 

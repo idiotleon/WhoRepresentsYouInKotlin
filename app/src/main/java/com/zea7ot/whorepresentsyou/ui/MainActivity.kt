@@ -1,4 +1,4 @@
-package com.zea7ot.whorepresentsyou
+package com.zea7ot.whorepresentsyou.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ListView
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.zea7ot.whorepresentsyou.R
 import com.zea7ot.whorepresentsyou.api.WhoRepresentsYouService
+import com.zea7ot.whorepresentsyou.ui.adapter.AdapterMembers
 import com.zea7ot.whorepresentsyou.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -43,13 +46,17 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { result -> Log.d(TAG, "${result.members}") },
+                { result ->
+                    val adapter = AdapterMembers(this, result.members)
+                    listView.adapter = adapter
+                },
                 { error -> Log.e(TAG, "$error") }
             )
     }
 
     private lateinit var layout: View
     private lateinit var fab: FloatingActionButton
+    private lateinit var listView: ListView
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -58,6 +65,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         setContentView(R.layout.activity_main)
 
         layout = findViewById(R.id.main_layout)
+        listView = findViewById(R.id.lv_main_activity)
         fab = findViewById(R.id.fab_main_activity)
 
         fab.setOnClickListener {

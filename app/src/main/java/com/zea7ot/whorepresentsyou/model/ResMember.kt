@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 import com.zea7ot.whorepresentsyou.util.JsonTitle
 
 data class ResMembers(
-    val members: List<ResMember>
+    @SerializedName(JsonTitle.RESULTS)
+    val members: ArrayList<ResMember>
 )
 
 data class ResMember(
