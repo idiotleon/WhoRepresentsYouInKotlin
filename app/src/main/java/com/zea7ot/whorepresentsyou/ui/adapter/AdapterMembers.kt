@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.zea7ot.whorepresentsyou.R
-import com.zea7ot.whorepresentsyou.model.ResMember
-import com.zea7ot.whorepresentsyou.ui.MemberDetailsActivity
+import com.zea7ot.whorepresentsyou.data.entity.ResMember
+import com.zea7ot.whorepresentsyou.ui.memberdetails.MemberDetailsActivity
 
 class AdapterMembers(private val context: Context, private val members: ArrayList<ResMember>) :
     BaseAdapter() {

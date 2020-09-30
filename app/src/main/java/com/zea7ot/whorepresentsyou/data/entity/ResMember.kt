@@ -1,4 +1,4 @@
-package com.zea7ot.whorepresentsyou.model
+package com.zea7ot.whorepresentsyou.data.entity
 
 import com.google.gson.annotations.SerializedName
 import com.zea7ot.whorepresentsyou.util.JsonTitle

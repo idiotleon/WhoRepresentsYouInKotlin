@@ -1,4 +1,4 @@
-package com.zea7ot.whorepresentsyou.ui
+package com.zea7ot.whorepresentsyou.ui.members
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,25 +9,27 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ListView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zea7ot.whorepresentsyou.R
-import com.zea7ot.whorepresentsyou.api.WhoRepresentsYouService
 import com.zea7ot.whorepresentsyou.ui.adapter.AdapterMembers
 import com.zea7ot.whorepresentsyou.util.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 const val PERMISSION_REQUEST_LOCATION = 0
 
-class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
+@AndroidEntryPoint
+class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     private companion object {
-        private val TAG = MainActivity::class.simpleName
+        private val TAG = MembersActivity::class.simpleName
 
         private val locationPermissions = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -35,24 +37,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         )
     }
 
-    private var disposable: Disposable? = null
-
-    private val whoRepresentsYouService by lazy {
-        WhoRepresentsYouService.create()
-    }
-
-    private fun getMembers(zipcode: String) {
-        disposable = whoRepresentsYouService.getAllMembers(zipcode)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { result ->
-                    val adapter = AdapterMembers(this, result.members)
-                    listView.adapter = adapter
-                },
-                { error -> Log.e(TAG, "$error") }
-            )
-    }
+    private val viewModel: MembersViewModel by viewModels()
 
     private lateinit var layout: View
     private lateinit var fab: FloatingActionButton
@@ -70,13 +55,33 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
         fab.setOnClickListener {
             // requestLocationUpdate()
-            getMembers("98052")
         }
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.members.observe(this, Observer {
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    val adapterMembers = AdapterMembers(this, ArrayList(it.data?.members))
+                    listView.adapter = adapterMembers
+                }
+
+                Resource.Status.ERROR -> {
+                    Timber.e(TAG, "${it.message}")
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
+
+                Resource.Status.LOADING -> {
+                    Timber.d(TAG, "being loaded")
+                }
+            }
+        })
     }
 
     override fun onPause() {
         super.onPause()
-        disposable?.dispose()
     }
 
     @SuppressLint("MissingPermission")
@@ -84,7 +89,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         if (checkAllPermissionsGranted(locationPermissions)) {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                Log.d(TAG, "$location")
+                Timber.d(TAG, "$location")
                 Snackbar.make(
                     layout,
                     "Latitude: ${location?.latitude}, Longitude: ${location?.longitude}",
