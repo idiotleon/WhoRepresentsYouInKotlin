@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 class MembersViewModel @ViewModelInject constructor(
     private val memberRepository: MemberRepository
 ) : ViewModel() {
-    // private val allMembers = MutableLiveData<Resource<ResMember>>()
     val allMembers = MutableLiveData<Resource<ResMembers>>()
 
     fun getAllMembers(zipCode: String) {

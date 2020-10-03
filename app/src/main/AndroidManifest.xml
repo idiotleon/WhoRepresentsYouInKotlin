@@ -23,6 +23,11 @@
         </activity>
         <activity android:name=".ui.members.MembersActivity" />
         <activity android:name=".ui.memberdetails.MemberDetailsActivity" />
+
+        <service
+            android:name=".service.LocationFetchIntentService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>
