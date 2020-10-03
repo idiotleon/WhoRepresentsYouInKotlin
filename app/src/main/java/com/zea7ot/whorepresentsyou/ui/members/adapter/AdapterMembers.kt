@@ -1,4 +1,4 @@
-package com.zea7ot.whorepresentsyou.ui.adapter
+package com.zea7ot.whorepresentsyou.ui.members.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

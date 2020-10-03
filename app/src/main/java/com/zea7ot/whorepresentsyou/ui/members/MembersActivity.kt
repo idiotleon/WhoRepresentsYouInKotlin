@@ -2,13 +2,10 @@ package com.zea7ot.whorepresentsyou.ui.members
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.ListView
 import android.widget.Toast
@@ -20,7 +17,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zea7ot.whorepresentsyou.R
-import com.zea7ot.whorepresentsyou.ui.adapter.AdapterMembers
+import com.zea7ot.whorepresentsyou.ui.members.adapter.AdapterMembers
 import com.zea7ot.whorepresentsyou.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
