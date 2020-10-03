@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.ResultReceiver
+import androidx.annotation.NonNull
 import androidx.core.app.JobIntentService
 import com.zea7ot.whorepresentsyou.receiver.ServiceResultReceiver
 import timber.log.Timber
@@ -16,7 +17,8 @@ class LocationFetchIntentService : JobIntentService() {
         private const val JOB_ID_UPDATE_LOCATION = 1000
 
         const val IDENTITY_ADDRESS = "identity_address"
-        const val IDENTITY_LOCATION = "identity_location"
+
+        // const val IDENTITY_LOCATION = "identity_location"
         const val IDENTITY_RECEIVER = "identity_receiver"
         const val RESULT_CODE_ADDRESS = 1001
 
@@ -35,7 +37,7 @@ class LocationFetchIntentService : JobIntentService() {
         }
     }
 
-    override fun onHandleWork(intent: Intent) {
+    override fun onHandleWork(@NonNull intent: Intent) {
         Timber.d(TAG, "onHandleWork() called")
         intent.action?.let {
             when (it) {

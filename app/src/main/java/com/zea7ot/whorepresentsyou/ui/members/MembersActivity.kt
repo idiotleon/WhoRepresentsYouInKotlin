@@ -2,7 +2,6 @@ package com.zea7ot.whorepresentsyou.ui.members
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -140,7 +138,7 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
                                 "One of the Permissions Denied",
                                 Snackbar.LENGTH_SHORT
                             ).show()
-                            break;
+                            break
                         }
                     }
                 } else {
