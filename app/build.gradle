@@ -113,6 +113,10 @@ dependencies {
     def VERSION_TIMBER = "4.7.1"
     implementation "com.jakewharton.timber:timber:$VERSION_TIMBER"
 
+    // Work Manager
+    def VERSION_WORK_MANAGER = "2.4.0"
+    implementation "androidx.work:work-runtime-ktx:$VERSION_WORK_MANAGER"
+
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

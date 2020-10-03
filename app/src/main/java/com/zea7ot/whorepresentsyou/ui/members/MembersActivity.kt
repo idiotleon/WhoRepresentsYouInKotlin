@@ -2,21 +2,25 @@ package com.zea7ot.whorepresentsyou.ui.members
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zea7ot.whorepresentsyou.R
+import com.zea7ot.whorepresentsyou.receiver.ServiceResultReceiver
+import com.zea7ot.whorepresentsyou.service.LocationFetchIntentService
 import com.zea7ot.whorepresentsyou.ui.members.adapter.AdapterMembers
 import com.zea7ot.whorepresentsyou.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,8 +29,8 @@ import timber.log.Timber
 const val PERMISSION_REQUEST_LOCATION = 0
 
 @AndroidEntryPoint
-class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
-
+class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
+    ServiceResultReceiver.Receiver {
     private companion object {
         private val TAG = MembersActivity::class.simpleName
 
@@ -42,6 +46,8 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
     private lateinit var fab: FloatingActionButton
     private lateinit var listView: ListView
 
+    private lateinit var serviceResultReceiver: ServiceResultReceiver
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,16 +59,18 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
         fab = findViewById(R.id.fab_main_activity)
 
         fab.setOnClickListener {
-            // requestLocationUpdate()
-            // viewModel.members
-            viewModel.getAllMembers("98052")
+            requestLocationUpdate()
         }
+
+        serviceResultReceiver = ServiceResultReceiver(
+            this as ServiceResultReceiver.Receiver,
+            Looper.myLooper()?.let { Handler(it) })
 
         setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.allMembers.observe(this, Observer {
+        viewModel.allMembers.observe(this, {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     Timber.d(TAG, "successful, setupObservers()")
@@ -82,10 +90,6 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
         })
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
     @SuppressLint("MissingPermission")
     private fun requestLocationUpdate() {
         if (checkAllPermissionsGranted(locationPermissions)) {
@@ -97,6 +101,12 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
                     "Latitude: ${location?.latitude}, Longitude: ${location?.longitude}",
                     Snackbar.LENGTH_LONG
                 ).show()
+
+                val intent = Intent(this, LocationFetchIntentService::class.java).apply {
+                    putExtra(LocationFetchIntentService.IDENTITY_LATITUDE, location?.latitude)
+                    putExtra(LocationFetchIntentService.IDENTITY_LONGITUDE, location?.longitude)
+                }
+                LocationFetchIntentService.enqueueWork(this, serviceResultReceiver, intent)
             }
         } else {
             requestLocationPermission()
@@ -118,11 +128,37 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
     ) {
         when (requestCode) {
             PERMISSION_REQUEST_LOCATION -> {
-                if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    requestLocationUpdate()
-                } else {
+                if (grantResults.size != locationPermissions.size) {
                     Snackbar.make(layout, "Permission Denied", Snackbar.LENGTH_SHORT).show()
+                } else if (grantResults.size == locationPermissions.size) {
+                    for (result in grantResults) {
+                        if (result != PackageManager.PERMISSION_GRANTED) {
+                            Snackbar.make(
+                                layout,
+                                "One of the Permissions Denied",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            break
+                        }
+                    }
+                } else {
+                    requestLocationUpdate()
                 }
+            }
+        }
+    }
+
+    // to fetch members based on the zip code acquired
+    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+        when (resultCode) {
+            LocationFetchIntentService.RESULT_CODE_ADDRESS -> {
+                resultData?.let {
+                    val zipCode = it[LocationFetchIntentService.IDENTITY_ADDRESS] as String
+                    viewModel.getAllMembers(zipCode)
+                }
+            }
+            else -> {
+
             }
         }
     }

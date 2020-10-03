@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WhoRepresentsYou</string>
+
+    <string name="google_api_key">the_google_api_key</string>
 </resources>
