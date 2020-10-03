@@ -24,3 +24,10 @@ class ApiUrl {
         const val GET_MEMBERS = "getall_mems.php"
     }
 }
+
+class ApiQuery {
+    companion object {
+        const val ZIP = "zip"
+        const val OUTPUT = "output"
+    }
+}

@@ -1,4 +1,4 @@
-package com.zea7ot.whorepresentsyou.ui
+package com.zea7ot.whorepresentsyou.ui.memberdetails
 
 import android.Manifest
 import android.content.Context
@@ -10,11 +10,14 @@ import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.zea7ot.whorepresentsyou.R
-import com.zea7ot.whorepresentsyou.model.ResMember
+import com.zea7ot.whorepresentsyou.data.entity.ResMember
+import com.zea7ot.whorepresentsyou.ui.members.PERMISSION_REQUEST_LOCATION
 import com.zea7ot.whorepresentsyou.util.checkAllPermissionsGranted
 import com.zea7ot.whorepresentsyou.util.requestPermissionCompat
 import com.zea7ot.whorepresentsyou.util.shouldShowRequestPermissionsRationaleCompat
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MemberDetailsActivity : AppCompatActivity() {
     companion object {
         private val TAG = MemberDetailsActivity::class.simpleName
@@ -75,10 +78,10 @@ class MemberDetailsActivity : AppCompatActivity() {
     }
 
     private fun requestRequiredPermissions() {
-        if (shouldShowRequestPermissionsRationaleCompat(MemberDetailsActivity.permissionsRequired)) {
-            requestPermissionCompat(MemberDetailsActivity.permissionsRequired, PERMISSION_REQUEST)
+        if (shouldShowRequestPermissionsRationaleCompat(permissionsRequired)) {
+            requestPermissionCompat(permissionsRequired, PERMISSION_REQUEST)
         } else {
-            requestPermissionCompat(MemberDetailsActivity.permissionsRequired, PERMISSION_REQUEST)
+            requestPermissionCompat(permissionsRequired, PERMISSION_REQUEST)
         }
     }
 }
