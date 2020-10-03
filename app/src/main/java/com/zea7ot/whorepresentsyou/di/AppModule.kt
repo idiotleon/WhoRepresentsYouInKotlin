@@ -1,12 +1,15 @@
 package com.zea7ot.whorepresentsyou.di
 
 import com.zea7ot.whorepresentsyou.BuildConfig
-import com.zea7ot.whorepresentsyou.data.remote.MemberService
-import com.zea7ot.whorepresentsyou.util.Constant
+import com.zea7ot.whorepresentsyou.data.remote.googleapi.GoogleApiService
+import com.zea7ot.whorepresentsyou.data.remote.member.MemberService
+import com.zea7ot.whorepresentsyou.util.ApiUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.components.ServiceComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -30,7 +33,7 @@ object AppModule {
         return Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(Constant.BASE_URL)
+            .baseUrl(ApiUrl.Member.BASE_URL)
             .client(client)
             .build()
     }
@@ -38,4 +41,8 @@ object AppModule {
     @Provides
     fun provideWhoRepresentsYouService(retrofit: Retrofit): MemberService =
         retrofit.create(MemberService::class.java)
+
+    @Provides
+    fun provideGoogleApiService(retrofit: Retrofit): GoogleApiService =
+        retrofit.create(GoogleApiService::class.java)
 }

@@ -2,6 +2,7 @@ package com.zea7ot.whorepresentsyou.ui.members
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -101,12 +102,11 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
                     Snackbar.LENGTH_LONG
                 ).show()
 
-                // no necessary for now
-//                val intent = Intent(this, LocationFetchIntentService::class.java).apply {
-//                    putExtra(LocationFetchIntentService.IDENTITY_LOCATION, location)
-//                    action = LocationFetchIntentService.ACTION_FETCH_LOCATION
-//                }
-                LocationFetchIntentService.enqueueWork(this, serviceResultReceiver)
+                val intent = Intent(this, LocationFetchIntentService::class.java).apply {
+                    putExtra(LocationFetchIntentService.IDENTITY_LATITUDE, location?.latitude)
+                    putExtra(LocationFetchIntentService.IDENTITY_LONGITUDE, location?.longitude)
+                }
+                LocationFetchIntentService.enqueueWork(this, serviceResultReceiver, intent)
             }
         } else {
             requestLocationPermission()
@@ -150,7 +150,6 @@ class MembersActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
 
     // to fetch members based on the zip code acquired
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-
         when (resultCode) {
             LocationFetchIntentService.RESULT_CODE_ADDRESS -> {
                 resultData?.let {
