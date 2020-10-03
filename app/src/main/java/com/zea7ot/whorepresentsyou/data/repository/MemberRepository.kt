@@ -7,7 +7,9 @@ import javax.inject.Inject
 class MemberRepository @Inject constructor(
     private val remoteDataSource: MemberRemoteDataSource
 ) {
-    fun getMembers(zipCode: String) = performGetOperation(
-        networkCall = { remoteDataSource.getMembers(zipCode) }
-    )
+//    fun getMembers(zipCode: String) = performGetOperation(
+//        networkCall = { remoteDataSource.getMembers(zipCode) }
+//    )
+
+    suspend fun getMembers(zipCode: String) = remoteDataSource.getMembers(zipCode)
 }
