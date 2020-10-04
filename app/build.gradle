@@ -17,6 +17,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    packagingOptions{
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
+
     defaultConfig {
         applicationId "com.zea7ot.whorepresentsyou"
         minSdkVersion 16
@@ -103,11 +107,12 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$VERSION_NAV"
     implementation "androidx.navigation:navigation-ui-ktx:$VERSION_NAV"
 
-    //Room
+    // Room
     def VERSION_ROOM = "2.2.5"
     implementation "androidx.room:room-runtime:$VERSION_ROOM"
     implementation "androidx.room:room-ktx:$VERSION_ROOM"
     kapt "androidx.room:room-compiler:$VERSION_ROOM"
+    androidTestImplementation "androidx.room:room-testing:$VERSION_ROOM"
 
     // Timber
     def VERSION_TIMBER = "4.7.1"
@@ -120,4 +125,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    def VERSION_CORE_TESTING = "2.1.0"
+    androidTestImplementation "androidx.arch.core:core-testing:$VERSION_CORE_TESTING"
 }

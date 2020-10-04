@@ -67,3 +67,23 @@ class DefaultValue {
         }
     }
 }
+
+class DatabaseConstant {
+    class TableName {
+        companion object {
+            const val PARTY_MEMBER_TABLE = "party_member_table"
+        }
+    }
+
+    class ColumnName {
+        companion object {
+            const val NAME = "name"
+            const val PHONE_NUMBER = "phoneNumber"
+            const val STATE = "state"
+            const val LINK = "link"
+            const val PARTY = "party"
+            const val DISTRICT = "district"
+            const val OFFICE = "office"
+        }
+    }
+}

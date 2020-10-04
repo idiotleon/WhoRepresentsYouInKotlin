@@ -23,8 +23,6 @@ class LocationFetchIntentService : JobIntentService() {
     lateinit var googleApiRepository: GoogleApiRepository
 
     companion object {
-        private val TAG = LocationFetchIntentService::class.simpleName
-
         private const val ACTION_FETCH_ADDRESS = "action.FETCH_ADDRESS"
         private const val JOB_ID_UPDATE_LOCATION = 1000
 
@@ -55,7 +53,7 @@ class LocationFetchIntentService : JobIntentService() {
     }
 
     override fun onHandleWork(@NonNull intent: Intent) {
-        Timber.d(TAG, "onHandleWork() called")
+        Timber.d("onHandleWork() called")
         intent.action?.let {
             when (it) {
                 ACTION_FETCH_ADDRESS -> {
@@ -66,7 +64,9 @@ class LocationFetchIntentService : JobIntentService() {
                             val longitude = intent.getDoubleExtra(IDENTITY_LONGITUDE, 0.toDouble())
                             CoroutineScope(Dispatchers.Default).launch {
                                 val addresses = getAddresses(latitude, longitude)
+                                Timber.d("onHandleWork(): ${addresses.toString()}")
                                 addresses.data?.getZipCode()?.let { zipCode ->
+                                    Timber.d("onHandleWork(), zipCode: $zipCode")
                                     if (zipCode != DefaultValue.Invalid.POSTAL_CODE_STRING) {
                                         // to send the result back
                                         receiver.send(
@@ -78,7 +78,7 @@ class LocationFetchIntentService : JobIntentService() {
                             }
                         } catch (ex: InterruptedException) {
                             ex.printStackTrace()
-                            Timber.e(TAG, "onHandleWork(): ${ex.stackTraceToString()}")
+                            Timber.e("onHandleWork(): ${ex.stackTraceToString()}")
                         }
                     }
                 }

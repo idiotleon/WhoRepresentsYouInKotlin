@@ -7,14 +7,15 @@ import com.zea7ot.whorepresentsyou.util.JsonValue
 
 data class ResAddress(
     @SerializedName(JsonTitle.RESULTS)
-    val results: Results
+    val results: ArrayList<Result>
 ) {
-    fun getZipCode(): String = results.getZipCode()
+    fun getZipCode(): String =
+        if (results.isEmpty()) DefaultValue.Invalid.POSTAL_CODE_STRING else results[0].getZipCode()
 }
 
-data class Results(
+data class Result(
     @SerializedName(JsonTitle.ADDRESS_COMPONENTS)
-    val addressComponent: ArrayList<AddressComponent>,
+    val addressComponents: ArrayList<AddressComponent>,
 
     @SerializedName(JsonTitle.FORMATTED_ADDRESS)
     val formattedAddress: String,
@@ -26,7 +27,7 @@ data class Results(
     val types: ArrayList<String>
 ) {
     fun getZipCode(): String {
-        val res = addressComponent.filter { it.types.contains(JsonValue.POSTAL_CODE) }
+        val res = addressComponents.filter { it.types.contains(JsonValue.POSTAL_CODE) }
         if (res.isEmpty()) return DefaultValue.Invalid.POSTAL_CODE_STRING
         return res[0].shortName
     }
