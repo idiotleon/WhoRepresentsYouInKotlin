@@ -1,27 +1,25 @@
-package com.zea7ot.whorepresentsyou.ui.memberdetails
+package com.zea7ot.whorepresentsyou.ui.paryMemberDetails
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.zea7ot.whorepresentsyou.R
-import com.zea7ot.whorepresentsyou.data.entity.ResMember
-import com.zea7ot.whorepresentsyou.ui.members.PERMISSION_REQUEST_LOCATION
+import com.zea7ot.whorepresentsyou.data.entity.PartyMember
+import com.zea7ot.whorepresentsyou.ui.partyMembers.PERMISSION_REQUEST_LOCATION
 import com.zea7ot.whorepresentsyou.util.checkAllPermissionsGranted
 import com.zea7ot.whorepresentsyou.util.requestPermissionCompat
 import com.zea7ot.whorepresentsyou.util.shouldShowRequestPermissionsRationaleCompat
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
-class MemberDetailsActivity : AppCompatActivity() {
+class PartyMemberDetailsActivity : AppCompatActivity() {
     companion object {
-        private val TAG = MemberDetailsActivity::class.simpleName
-
         private val permissionsRequired = arrayOf(Manifest.permission.INTERNET)
 
         private const val PERMISSION_REQUEST = 0
@@ -29,8 +27,8 @@ class MemberDetailsActivity : AppCompatActivity() {
         private const val EXTRA_NAME = "title"
         private const val EXTRA_LINK = "link"
 
-        fun newIntent(context: Context, member: ResMember) =
-            Intent(context, MemberDetailsActivity::class.java).apply {
+        fun newIntent(context: Context, member: PartyMember) =
+            Intent(context, PartyMemberDetailsActivity::class.java).apply {
                 putExtra(EXTRA_NAME, member.name)
                 putExtra(EXTRA_LINK, member.link)
             }
@@ -51,7 +49,7 @@ class MemberDetailsActivity : AppCompatActivity() {
 
         if (checkAllPermissionsGranted(permissionsRequired)) {
             link?.let {
-                Log.d(TAG, "link: $it")
+                Timber.d("link: $it")
                 webView.settings.javaScriptEnabled = false
                 // webView.loadUrl("http://www.google.com")
                 webView.loadUrl(it)

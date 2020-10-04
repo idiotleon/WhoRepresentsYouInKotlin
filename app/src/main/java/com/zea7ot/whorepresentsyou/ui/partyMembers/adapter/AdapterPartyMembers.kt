@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.zea7ot.whorepresentsyou.R
 import com.zea7ot.whorepresentsyou.data.entity.PartyMember
-import com.zea7ot.whorepresentsyou.ui.paryMemberDetails.MemberDetailsActivity
+import com.zea7ot.whorepresentsyou.ui.paryMemberDetails.PartyMemberDetailsActivity
 
 class AdapterPartyMembers(
     private val context: Context,
@@ -53,7 +53,7 @@ class AdapterPartyMembers(
         tvName.text = member.name
 
         tvName.setOnClickListener {
-            val intent = MemberDetailsActivity.newIntent(context, member)
+            val intent = PartyMemberDetailsActivity.newIntent(context, member)
             context.startActivity(intent)
         }
 

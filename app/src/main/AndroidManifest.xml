@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.partyMembers.PartyMembersActivity" />
-        <activity android:name=".ui.paryMemberDetails.MemberDetailsActivity" />
+        <activity android:name=".ui.paryMemberDetails.PartyMemberDetailsActivity" />
 
         <service
             android:name=".service.LocationFetchIntentService"
