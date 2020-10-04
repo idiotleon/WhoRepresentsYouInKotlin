@@ -1,4 +1,4 @@
-package com.zea7ot.whorepresentsyou.data.remote.googleapi
+package com.zea7ot.whorepresentsyou.data.remote.googleApi
 
 import com.zea7ot.whorepresentsyou.MainApplication
 import com.zea7ot.whorepresentsyou.R
