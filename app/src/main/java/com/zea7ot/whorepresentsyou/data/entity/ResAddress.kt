@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.zea7ot.whorepresentsyou.util.DefaultValue
 import com.zea7ot.whorepresentsyou.util.JsonTitle
 import com.zea7ot.whorepresentsyou.util.JsonValue
-import timber.log.Timber
 
 data class ResAddress(
     @SerializedName(JsonTitle.RESULTS)
