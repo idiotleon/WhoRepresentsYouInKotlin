@@ -5,7 +5,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.partyMembers.MainActivity">
+    tools:context=".ui.partyMembers.PartyMembersActivity">
 
     <ListView
         android:id="@+id/lv_main_activity"
@@ -21,10 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_small"
         android:layout_marginRight="@dimen/margin_small"
         android:layout_marginBottom="@dimen/margin_medium"
-        android:src="@android:drawable/btn_default"
+        android:src="@drawable/ic_geolocate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
